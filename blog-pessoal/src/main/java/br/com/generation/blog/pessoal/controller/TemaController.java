@@ -21,9 +21,8 @@ import br.com.generation.blog.pessoal.model.Tema;
 import br.com.generation.blog.pessoal.repository.TemaRepository;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping ("/tema")
-
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class TemaController {
 
 	@Autowired
@@ -34,25 +33,25 @@ public class TemaController {
 		return ResponseEntity.ok(repository.findAll());
 	}
 	
-	@GetMapping("/nome{nome}")
+	@GetMapping("/nome/{nome}")
 	public ResponseEntity<List<Tema>> getByName(@PathVariable String nome){
 		return ResponseEntity.ok(repository.findAllByDescricaoContainingIgnoreCase(nome));
 	}
 	
 	@PostMapping
-	public ResponseEntity<Tema> post (@Valid @RequestBody Tema tema){
+	public ResponseEntity<Tema> post(@Valid @RequestBody Tema tema){
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
 	}
 	
 	@PutMapping
-	public ResponseEntity<Tema> put (@Valid @RequestBody Tema tema){
+	public ResponseEntity<Tema> put(@Valid @RequestBody Tema tema){
 		return repository.findById(tema.getId())
 				.map(resp -> ResponseEntity.status(HttpStatus.OK).body(repository.save(tema)))
 				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> delete (@PathVariable long id){
+	public ResponseEntity<?> delete(@PathVariable long id){
 		return repository.findById(id).map(resposta -> {
 					repository.deleteById(id);
 				return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
